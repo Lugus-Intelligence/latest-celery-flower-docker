@@ -1,14 +1,14 @@
 FROM python:3.6-alpine
 
-LABEL maintainer="Grega Vrbančič <grega.vrbancic@gmail.com>"
-LABEL description="Docker container containing the Celery Flower monitoring application."
+LABEL maintainer="Lugus Intelligence <contact@lugus-intelligence.com>"
+LABEL description="Docker container containing Celery Flower monitoring application."
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV ETCDCTL_VERSION v2.2.5
 ENV DUMB_INIT_VERSION 1.0.1
 
-ARG FLOWER_VERSION=0.9.7
-ARG CELERY_VERSION=4.4.7
+ARG FLOWER_VERSION=1.0.1
+ARG CELERY_VERSION=5.1.1
 
 RUN apk add --no-cache --update openssl curl && \
   # Etcdctl
@@ -19,7 +19,9 @@ RUN apk add --no-cache --update openssl curl && \
   chmod +x /usr/bin/dumb-init && \
   rm -rf /tmp/*
 
-RUN pip3 install --ignore-installed --no-cache-dir flower==${FLOWER_VERSION} celery==${CELERY_VERSION} && \
+RUN pip3 install --upgrade pip && \
+  pip3 install https://github.com/mher/flower/zipball/master#egg=flower==${FLOWER_VERSION} && \
+  pip3 install --ignore-installed --no-cache-dir celery==${CELERY_VERSION} && \
   find /usr/local \
   \( -type d -a -name test -o -name tests \) -exec echo rm -rf '{}' + \
   -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) -exec echo rm -f '{}' + && \

@@ -26,4 +26,4 @@ if [ "$DISCOVER_RABBITMQ" == "true" ]; then
   done
 fi
 
-/usr/local/bin/celery --loglevel="$LOG_LEVEL" flower
+/usr/local/bin/celery flower
